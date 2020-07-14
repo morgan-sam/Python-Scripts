@@ -30,11 +30,12 @@ def inlineStylesToCss(styles):
     return convertToClassName(styles)
 
 def convertInlinesToCssFile(file, inlines):
-    newFileName = re.sub(r'.js', '.css', file)
-    styles = inlineStylesToCss(inlines)
-    with open(os.path.join(currentpath, newFileName), 'a+') as f:
-        for style in styles:
-            f.write("%s\n" % style)
+    if (len(inlines)):
+        newFileName = re.sub(r'.js', '.css', file)
+        styles = inlineStylesToCss(inlines)
+        with open(os.path.join(currentpath, newFileName), 'a+') as f:
+            for style in styles:
+                f.write("%s\n" % style)
 
 dir = getDirectory()
 os.system('prettier --write {}/*.js'.format(dir))
