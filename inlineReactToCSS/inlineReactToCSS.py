@@ -1,4 +1,4 @@
-import os, re, os, sys
+import os, re, sys
 
 def getDirectory():
     if len(sys.argv) > 1: return sys.argv[1]
