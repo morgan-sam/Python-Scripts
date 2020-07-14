@@ -15,6 +15,9 @@ def replaceCommasWithColons(inlines):
 def removeCamelCase(inlines):
     return map(lambda x:re.sub(r'([A-Z])',lambda x: '-'+x.group(0).lower(),x),inlines)
 
+def convertToClassName(inlines):
+    return map(lambda x:re.sub(r'(?:export )*const ([a-zA-z0-9\-]+) = ','.\\1 ',x),inlines)
+
 os.system("./resetInput.sh")
 os.system("prettier --write ./input/*")
 
@@ -32,6 +35,7 @@ for currentpath, folders, files in os.walk('./input'):
 inlines = removeSpeechMarks(inlines)
 inlines = replaceCommasWithColons(inlines)
 inlines = removeCamelCase(inlines)
+inlines = convertToClassName(inlines)
 
 for inline in inlines:
     print(inline)
