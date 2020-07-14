@@ -24,6 +24,13 @@ def inlineStylesToCSS(styles):
     styles = removeCamelCase(styles)
     return convertToClassName(styles)
 
+def convertInlinesToCssFile(file,inlines):
+    newFileName=re.sub(r'.js','.css',file)
+    styles=inlineStylesToCSS(inlines)
+    with open(os.path.join(currentpath, newFileName), 'w') as f:
+        for style in styles:
+            f.write("%s\n" % style)
+
 
 os.system("./resetInput.sh")
 os.system("prettier --write ./input/*")
@@ -38,9 +45,4 @@ for currentpath, folders, files in os.walk('./input'):
             read_file = read_file.replace(match,'')
         write_file = open(path, 'w')
         write_file.write(read_file)
-
-        newFileName=re.sub(r'.js','.css',file)
-        styles=inlineStylesToCSS(inlines)
-        with open(os.path.join(currentpath, newFileName), 'w') as f:
-            for style in styles:
-                f.write("%s\n" % style)
+        convertInlinesToCssFile(file,inlines)
