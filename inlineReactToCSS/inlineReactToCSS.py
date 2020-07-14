@@ -23,6 +23,7 @@ def convertToClassName(inlines):
 def inlineStylesToCss(styles):
     styles = removeSpeechMarks(styles)
     styles = replaceCommasWithColons(styles)
+    # replace constant variables before removing camel case
     styles = removeCamelCase(styles)
     return convertToClassName(styles)
 
