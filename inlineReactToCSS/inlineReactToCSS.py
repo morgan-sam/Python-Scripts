@@ -32,7 +32,7 @@ def inlineStylesToCss(styles):
 def convertInlinesToCssFile(file, inlines):
     newFileName = re.sub(r'.js', '.css', file)
     styles = inlineStylesToCss(inlines)
-    with open(os.path.join(currentpath, newFileName), 'w') as f:
+    with open(os.path.join(currentpath, newFileName), 'a+') as f:
         for style in styles:
             f.write("%s\n" % style)
 
