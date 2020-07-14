@@ -40,16 +40,17 @@ def convertInlinesToCssFile(file, inlines):
 
 
 os.system("./resetInput.sh")
-os.system("prettier --write ./input/*")
+os.system("prettier --write ./input/*.js")
 
 for currentpath, folders, files in os.walk('./input'):
     for file in files:
-        path = (os.path.join(currentpath, file))
-        open_file = open(path, 'r')
-        read_file = open_file.read()
-        inlines = findInlineStylesFromCss(read_file)
-        for match in inlines:
-            read_file = read_file.replace(match, '')
-        write_file = open(path, 'w')
-        write_file.write(read_file)
-        convertInlinesToCssFile(file, inlines)
+        if file.endswith(".js"):
+            path = (os.path.join(currentpath, file))
+            open_file = open(path, 'r')
+            read_file = open_file.read()
+            inlines = findInlineStylesFromCss(read_file)
+            for match in inlines:
+                read_file = read_file.replace(match, '')
+            write_file = open(path, 'w')
+            write_file.write(read_file)
+            convertInlinesToCssFile(file, inlines)
