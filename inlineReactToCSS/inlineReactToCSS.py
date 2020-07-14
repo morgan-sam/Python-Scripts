@@ -4,6 +4,10 @@ def getDirectory():
     if len(sys.argv) > 1: return sys.argv[1]
     else: return '.'
 
+def findConstantsFromCss(file):
+    regex = r'(?:export )*const ([A-Z_]+) = ([a-zA-Z0-9_\-\'\"\`]+);'
+    return re.findall(regex, file, re.MULTILINE | re.DOTALL)
+
 def findInlineStylesFromCss(file):
     regex = r'(?:export )*const [a-zA-z0-9]+ = {.+?(?=};)};'
     return re.findall(regex, file, re.MULTILINE | re.DOTALL)
@@ -23,7 +27,6 @@ def convertToClassName(inlines):
 def inlineStylesToCss(styles):
     styles = removeSpeechMarks(styles)
     styles = replaceCommasWithColons(styles)
-    # replace constant variables before removing camel case
     styles = removeCamelCase(styles)
     return convertToClassName(styles)
 
@@ -44,6 +47,8 @@ for currentpath, folders, files in os.walk(dir):
             path = (os.path.join(currentpath, file))
             open_file = open(path, 'r')
             read_file = open_file.read()
+            constants = findConstantsFromCss(read_file)
+            print(constants)
             inlines = findInlineStylesFromCss(read_file)
             for match in inlines:
                 read_file = read_file.replace(match, '').strip()
