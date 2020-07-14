@@ -18,6 +18,13 @@ def removeCamelCase(inlines):
 def convertToClassName(inlines):
     return map(lambda x:re.sub(r'(?:export )*const ([a-zA-z0-9\-]+) = ','.\\1 ',x),inlines)
 
+def inlineStylesToCSS(styles):
+    styles = removeSpeechMarks(styles)
+    styles = replaceCommasWithColons(styles)
+    styles = removeCamelCase(styles)
+    return convertToClassName(styles)
+
+
 os.system("./resetInput.sh")
 os.system("prettier --write ./input/*")
 
@@ -33,10 +40,7 @@ for currentpath, folders, files in os.walk('./input'):
         write_file.write(read_file)
 
         newFileName=re.sub(r'.js','.css',file)
-        inlines = removeSpeechMarks(inlines)
-        inlines = replaceCommasWithColons(inlines)
-        inlines = removeCamelCase(inlines)
-        inlines = convertToClassName(inlines)
+        styles=inlineStylesToCSS(inlines)
         with open(os.path.join(currentpath, newFileName), 'w') as f:
-            for item in inlines:
-                f.write("%s\n" % item)
+            for style in styles:
+                f.write("%s\n" % style)
