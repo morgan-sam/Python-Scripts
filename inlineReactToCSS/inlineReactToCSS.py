@@ -9,6 +9,9 @@ def findInlineStylesFromCSS(file):
 def removeSpeechMarks(inlines):
     return map(lambda x:re.sub(r'[\'\`]','',x),inlines)
 
+def replaceCommasWithColons(inlines):
+    return map(lambda x:re.sub(r',\n',';\n',x),inlines)
+
 os.system("./resetInput.sh")
 os.system("prettier --write ./input/*")
 
@@ -24,5 +27,7 @@ for currentpath, folders, files in os.walk('./input'):
         write_file.write(read_file)
 
 inlines = removeSpeechMarks(inlines)
+print(inlines)
+inlines = replaceCommasWithColons(inlines)
 for inline in inlines:
     print(inline)
