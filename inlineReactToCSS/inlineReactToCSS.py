@@ -47,6 +47,8 @@ for currentpath, folders, files in os.walk(dir):
             inlines = findInlineStylesFromCss(read_file)
             for match in inlines:
                 read_file = read_file.replace(match, '').strip()
-            write_file = open(path, 'w')
-            write_file.write(read_file)
+            if (len(read_file) > 0):
+                write_file = open(path, 'w')
+                write_file.write(read_file)
+            else: os.remove(path)
             convertInlinesToCssFile(file, inlines)
