@@ -32,10 +32,11 @@ for currentpath, folders, files in os.walk('./input'):
         write_file = open(path, 'w')
         write_file.write(read_file)
 
-inlines = removeSpeechMarks(inlines)
-inlines = replaceCommasWithColons(inlines)
-inlines = removeCamelCase(inlines)
-inlines = convertToClassName(inlines)
-
-for inline in inlines:
-    print(inline)
+        newFileName=re.sub(r'.js','.css',file)
+        inlines = removeSpeechMarks(inlines)
+        inlines = replaceCommasWithColons(inlines)
+        inlines = removeCamelCase(inlines)
+        inlines = convertToClassName(inlines)
+        with open(os.path.join(currentpath, newFileName), 'w') as f:
+            for item in inlines:
+                f.write("%s\n" % item)
