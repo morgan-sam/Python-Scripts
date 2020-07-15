@@ -81,6 +81,14 @@ def convertInlinesToCssFile(file, inlines, constDic):
 dir = getDirectory()
 os.system('prettier --write {}/*.js'.format(dir))
 
+def writeToJsFile(read_file, inlines, path):
+    for match in inlines:
+        read_file = read_file.replace(match, '').strip()
+    if (len(read_file) > 0):
+        write_file = open(path, 'w')
+        write_file.write(read_file)
+    else:
+        os.remove(path)
 
 
 for currentpath, folders, files in os.walk(dir):
@@ -93,11 +101,6 @@ for currentpath, folders, files in os.walk(dir):
             inlines = findInlineStylesFromCss(read_file)
             constInlines = usedConstInlines(inlines, constants)
 
-            for match in inlines:
-                read_file = read_file.replace(match, '').strip()
-            if (len(read_file) > 0):
-                write_file = open(path, 'w')
-                write_file.write(read_file)
-            else:
-                os.remove(path)
+            writeToJsFile(read_file, inlines, path);
+
             convertInlinesToCssFile(file, inlines, constInlines)
