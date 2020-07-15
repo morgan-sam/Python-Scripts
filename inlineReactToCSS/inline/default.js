@@ -1,6 +1,8 @@
 export const EVENT_HEIGHT_REM = 5;
 export const BUTTON_COLOR = 'salmon';
 export const DATE_SELECT_COLOR = 'red';
+export const OPTIONS_PADDING = '4rem';
+export const DATE_Z_INDEX = 9;
 
 export const dateSelectStyle = {
 	display: 'grid',
@@ -12,7 +14,7 @@ export const dateSelectStyle = {
 	verticalAlign: 'middle',
 	gridColumnGap: '1rem',
 	padding: '0.5rem 1rem',
-	zIndex: '2'
+	zIndex: DATE_Z_INDEX
 };
 
 export const getBounceButtonStyle = (pressed, delay) => {
@@ -40,7 +42,7 @@ const optionsContainerStyle = {
 export const optionsPanelItem = {
 	display: 'flex',
 	flexWrap: 'wrap',
-	padding: '0.5rem 0',
+	padding: OPTIONS_PADDING,
 	justifyContent: 'center',
 	alignItems: 'center'
 };

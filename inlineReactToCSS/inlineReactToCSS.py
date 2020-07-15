@@ -50,10 +50,15 @@ def inlineStylesToCss(styles):
     styles = removeCamelCase(styles)
     return convertToClassName(styles)
 
+def convertConstDicToCssVars(constDic):
+    return map(lambda x: '--{}: {};'.format(x[0],x[1]), constDic.items())
 
-def convertInlinesToCssFile(file, inlines):
+
+def convertInlinesToCssFile(file, inlines, constDic):
     if (len(inlines)):
         newFileName = re.sub(r'.js', '.css', file)
+        cssVars = convertConstDicToCssVars(constDic)
+        print(cssVars)
         styles = inlineStylesToCss(inlines)
         with open(os.path.join(currentpath, newFileName), 'a+') as f:
             for style in styles:
@@ -62,6 +67,8 @@ def convertInlinesToCssFile(file, inlines):
 
 dir = getDirectory()
 os.system('prettier --write {}/*.js'.format(dir))
+
+
 
 for currentpath, folders, files in os.walk(dir):
     for file in files:
@@ -72,7 +79,7 @@ for currentpath, folders, files in os.walk(dir):
             constants = fileConstDic(read_file)
             inlines = findInlineStylesFromCss(read_file)
             constInlines = usedConstInlines(inlines, constants)
-            print(constInlines)
+
             for match in inlines:
                 read_file = read_file.replace(match, '').strip()
             if (len(read_file) > 0):
@@ -80,4 +87,4 @@ for currentpath, folders, files in os.walk(dir):
                 write_file.write(read_file)
             else:
                 os.remove(path)
-            convertInlinesToCssFile(file, inlines)
+            convertInlinesToCssFile(file, inlines, constInlines)
