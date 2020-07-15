@@ -43,6 +43,9 @@ def removeCamelCase(inlines):
 def convertToClassName(inlines):
     return map(lambda x: re.sub(r'(?:export )*const ([a-zA-z0-9\-]+) = ', '.\\1 ', x), inlines)
 
+def constToCssVarFormat(const):
+    return re.sub(r'_','-',const.lower())
+
 
 def inlineStylesToCss(styles):
     styles = removeSpeechMarks(styles)
@@ -51,7 +54,7 @@ def inlineStylesToCss(styles):
     return convertToClassName(styles)
 
 def convertConstDicToCssVars(constDic):
-    return map(lambda x: '--{}: {};'.format(x[0],x[1]), constDic.items())
+    return map(lambda x: '--{}: {};'.format(constToCssVarFormat(x[0]),x[1]), constDic.items())
 
 
 def convertInlinesToCssFile(file, inlines, constDic):
