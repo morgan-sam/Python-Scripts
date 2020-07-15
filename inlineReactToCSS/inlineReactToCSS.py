@@ -19,7 +19,8 @@ def getDictOfConstants(file):
 def findConstantsUsedByInlines(inlines, constants):
     varNames = list(constants.keys())
     allInlines = ''.join(inlines)
-    return filter(lambda x: allInlines.find(x) != -1, varNames)
+    used = filter(lambda x: allInlines.find(x) != -1, varNames)
+    return {key: constants[key] for key in used}
 
 
 def findInlineStylesFromCss(file):
