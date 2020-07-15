@@ -16,11 +16,10 @@ def getDictOfConstants(file):
     return {constants[i][0]: constants[i][1] for i in range(0, len(constants))} 
 
 
-# def findConstantsUsedByInlines(inlines, constants):
-#     print(constants)
-#     varNames = map(lambda x: x[0], constants)
-#     allInlines = ''.join(inlines)
-#     return filter(lambda x: allInlines.find(x) != -1, varNames)
+def findConstantsUsedByInlines(inlines, constants):
+    varNames = list(constants.keys())
+    allInlines = ''.join(inlines)
+    return filter(lambda x: allInlines.find(x) != -1, varNames)
 
 
 def findInlineStylesFromCss(file):
@@ -71,8 +70,8 @@ for currentpath, folders, files in os.walk(dir):
             read_file = open_file.read()
             constants = getDictOfConstants(read_file)
             inlines = findInlineStylesFromCss(read_file)
-            # constUsed = findConstantsUsedByInlines(inlines, constants)
-            # print(constUsed)
+            constUsed = findConstantsUsedByInlines(inlines, constants)
+            print(constUsed)
             for match in inlines:
                 read_file = read_file.replace(match, '').strip()
             if (len(read_file) > 0):
