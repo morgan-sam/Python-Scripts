@@ -1,8 +1,10 @@
 export const EVENT_HEIGHT_REM = 5;
 export const BUTTON_COLOR = 'salmon';
+export const DATE_SELECT_COLOR = 'red';
 
 export const dateSelectStyle = {
     display: 'grid',
+    backgroundColor: DATE_SELECT_COLOR,
     gridTemplateColumns: '3rem 4rem 5rem',
     gridTemplateRows: '1fr 3fr',
     gridTemplateAreas: '". . ." ". . ."',
