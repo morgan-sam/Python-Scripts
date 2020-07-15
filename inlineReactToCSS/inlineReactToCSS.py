@@ -27,6 +27,11 @@ def findInlineStylesFromCss(file):
     regex = r'(?:export )*const [a-zA-z0-9]+ = {.+?(?=};)};'
     return re.findall(regex, file, re.MULTILINE | re.DOTALL)
 
+def addCssVarsToInline(inline, constDic):
+    keys = list(constDic.keys())
+    for i in range(len(keys)):
+        inline = inline.replace(keys[i], 'var(--{})'.format(constToCssVarFormat(keys[i])))
+    return inline
 
 def removeSpeechMarks(inlines):
     return map(lambda x: re.sub(r'[\'\`]', '', x), inlines)
@@ -47,7 +52,8 @@ def constToCssVarFormat(const):
     return re.sub(r'_','-',const.lower())
 
 
-def inlineStylesToCss(styles):
+def inlineStylesToCss(styles, constDic):
+    styles = map(lambda x: addCssVarsToInline(x, constDic), styles)
     styles = removeSpeechMarks(styles)
     styles = replaceCommasWithColons(styles)
     styles = removeCamelCase(styles)
@@ -60,8 +66,8 @@ def convertConstDicToCssVars(constDic):
 def convertInlinesToCssFile(file, inlines, constDic):
     if (len(inlines)):
         newFileName = re.sub(r'.js', '.css', file)
+        styles = inlineStylesToCss(inlines, constDic)
         cssVars = convertConstDicToCssVars(constDic)
-        styles = inlineStylesToCss(inlines)
         with open(os.path.join(currentpath, newFileName), 'a+') as f:
             if (len(cssVars)):
                 f.write(":root {\n")
