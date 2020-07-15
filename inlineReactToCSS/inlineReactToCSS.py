@@ -10,13 +10,13 @@ def getDirectory():
         return '.'
 
 
-def getDictOfConstants(file):
+def fileConstDic(file):
     regex = r'(?:export )*const ([A-Z_]+) = ([a-zA-Z0-9_\-\'\"\`]+);'
     constants = re.findall(regex, file, re.MULTILINE | re.DOTALL)
     return {constants[i][0]: constants[i][1] for i in range(0, len(constants))} 
 
 
-def findConstantsUsedByInlines(inlines, constants):
+def usedConstInlines(inlines, constants):
     varNames = list(constants.keys())
     allInlines = ''.join(inlines)
     used = filter(lambda x: allInlines.find(x) != -1, varNames)
@@ -69,10 +69,10 @@ for currentpath, folders, files in os.walk(dir):
             path = (os.path.join(currentpath, file))
             open_file = open(path, 'r')
             read_file = open_file.read()
-            constants = getDictOfConstants(read_file)
+            constants = fileConstDic(read_file)
             inlines = findInlineStylesFromCss(read_file)
-            constUsed = findConstantsUsedByInlines(inlines, constants)
-            print(constUsed)
+            constInlines = usedConstInlines(inlines, constants)
+            print(constInlines)
             for match in inlines:
                 read_file = read_file.replace(match, '').strip()
             if (len(read_file) > 0):
