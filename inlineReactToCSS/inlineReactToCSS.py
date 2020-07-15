@@ -58,9 +58,13 @@ def convertInlinesToCssFile(file, inlines, constDic):
     if (len(inlines)):
         newFileName = re.sub(r'.js', '.css', file)
         cssVars = convertConstDicToCssVars(constDic)
-        print(cssVars)
         styles = inlineStylesToCss(inlines)
         with open(os.path.join(currentpath, newFileName), 'a+') as f:
+            if (len(cssVars)):
+                f.write(":root {\n")
+                for var in cssVars:
+                    f.write("    %s\n" % var)
+                f.write("}\n\n")
             for style in styles:
                 f.write("%s\n\n" % style)
 
