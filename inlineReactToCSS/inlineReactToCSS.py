@@ -15,6 +15,9 @@ def fileConstDic(file):
     constants = re.findall(regex, file, re.MULTILINE | re.DOTALL)
     return {constants[i][0]: constants[i][1] for i in range(0, len(constants))} 
 
+def getNonExportConstants(file):
+    regex = r'^((?!export )const ([A-Z_]+) = ([a-zA-Z0-9_\-\'\"\`]+);)$'
+    return re.findall(regex, file, re.MULTILINE | re.DOTALL)
 
 def usedConstInlines(inlines, constants):
     varNames = list(constants.keys())
@@ -77,18 +80,27 @@ def convertInlinesToCssFile(file, inlines, constDic):
             for style in styles:
                 f.write("%s\n\n" % style)
 
+def removeUnusedConsts(read_file, constants):
+    keys = constants.keys()
+    for i in range(len(keys)):
+        if (len(re.findall(keys[i], read_file)) < 2):
+            read_file = re.sub(r'(?:export )*const {} = ([a-zA-Z0-9_\-\'\"\`]+);'.format(keys[i]), '', read_file)
+    return read_file
 
-dir = getDirectory()
-os.system('prettier --write {}/*.js'.format(dir))
 
-def writeToJsFile(read_file, inlines, path):
+def writeToJsFile(read_file, inlines, constants, path):
     for match in inlines:
         read_file = read_file.replace(match, '').strip()
+    read_file = removeUnusedConsts(read_file, constants)
     if (len(read_file) > 0):
         write_file = open(path, 'w')
         write_file.write(read_file)
     else:
         os.remove(path)
+
+
+dir = getDirectory()
+os.system('prettier --write {}/*.js'.format(dir))
 
 
 for currentpath, folders, files in os.walk(dir):
@@ -100,7 +112,9 @@ for currentpath, folders, files in os.walk(dir):
             constants = fileConstDic(read_file)
             inlines = findInlineStylesFromCss(read_file)
             constInlines = usedConstInlines(inlines, constants)
+            nonExport = getNonExportConstants(read_file)
+            print(nonExport)
 
-            writeToJsFile(read_file, inlines, path);
+            writeToJsFile(read_file, inlines, constants, path);
 
             convertInlinesToCssFile(file, inlines, constInlines)

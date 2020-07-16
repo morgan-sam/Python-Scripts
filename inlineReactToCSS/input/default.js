@@ -3,6 +3,10 @@ export const BUTTON_COLOR = 'salmon';
 export const DATE_SELECT_COLOR = 'red';
 export const OPTIONS_PADDING = '4rem';
 export const DATE_Z_INDEX = 9;
+const POINTER_STYLE = 'cursor';
+const SPEECH_BOX_COLOR = 'steelblue';
+const SPEECH_BOX_WIDTH = '2rem';
+const SPEECH_BOX_HEIGHT = '4rem';
 
 export const dateSelectStyle = {
     display: 'grid',
@@ -22,7 +26,7 @@ export const getBounceButtonStyle = (pressed, delay) => {
         position: 'relative',
         backgroundImage: 'linear-gradient(#fff, #eee)',
         borderRadius: '1rem',
-        cursor: 'pointer',
+        cursor: POINTER_STYLE,
         outline: '0',
         lineHeight: '0',
         border: '1px solid black',
