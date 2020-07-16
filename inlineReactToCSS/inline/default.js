@@ -49,6 +49,11 @@ const optionsContainerStyle = {
 	border: `1px solid ${BORDER_COLOR}`
 };
 
+const finalOptionContainerStyle = {
+	...optionsContainerStyle,
+	backgroundColor: 'green'
+};
+
 export const optionsPanelItem = {
 	display: 'flex',
 	flexWrap: 'wrap',
