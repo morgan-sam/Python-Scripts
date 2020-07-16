@@ -7,6 +7,7 @@ const POINTER_STYLE = 'cursor';
 const SPEECH_BOX_COLOR = 'steelblue';
 const SPEECH_BOX_WIDTH = '2rem';
 const SPEECH_BOX_HEIGHT = '4rem';
+const BORDER_COLOR = 'lime';
 
 export const dateSelectStyle = {
 	display: 'grid',
@@ -29,7 +30,7 @@ export const getBounceButtonStyle = (pressed, delay) => {
 		cursor: POINTER_STYLE,
 		outline: '0',
 		lineHeight: '0',
-		border: '1px solid black',
+		border: `1px solid ${BORDER_COLOR}`,
 		boxShadow: '0 2px 1px #ccc, 0 0.3rem #ccc',
 		animation: pressed ? `button-bounce ${delay / 1000}s 1` : 'none'
 	};
@@ -40,7 +41,8 @@ const optionsContainerStyle = {
 	display: 'flex',
 	flexDirection: 'column',
 	justifyContent: 'center',
-	alignItems: 'center'
+	alignItems: 'center',
+	border: `1px solid ${BORDER_COLOR}`
 };
 
 export const optionsPanelItem = {
