@@ -33,7 +33,8 @@ def findInlineStylesFromCss(file):
 def addCssVarsToInline(inline, constDic):
     keys = list(constDic.keys())
     for i in range(len(keys)):
-        inline = inline.replace(keys[i], 'var(--{})'.format(constToCssVarFormat(keys[i])))
+        regex = re.compile('(?:\\$\\{)*'+keys[i]+'(?:\\})*')
+        inline = re.sub(regex, 'var(--{})'.format(constToCssVarFormat(keys[i])), inline)
     return inline
 
 def removeSpeechMarks(inlines):
