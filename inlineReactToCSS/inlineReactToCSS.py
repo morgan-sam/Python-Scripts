@@ -99,9 +99,13 @@ def writeToJsFile(read_file, inlines, path):
     else:
         os.remove(path)
 
-def openConvertFile(currentpath, file):
+def openFile(currentpath, file):
     path = (os.path.join(currentpath, file))
     read_file = open(path, 'r').read()
+    return [path, read_file]
+
+
+def convertFile(file, path, read_file):
     constants = fileConstDic(read_file)
     inlines = findInlineStylesFromCss(read_file)
     constInlines = usedConstInlines(inlines, constants)
@@ -109,9 +113,10 @@ def openConvertFile(currentpath, file):
     convertInlinesToCssFile(file, inlines, constInlines)
 
 
-
 dir = getDirectory()
 os.system('prettier --write {}/*.js'.format(dir))
 for currentpath, folders, files in os.walk(dir):
     for file in files:
-        if file.endswith(".js"): openConvertFile(currentpath, file)
+        if file.endswith(".js"):
+            path, read_file = openFile(currentpath, file)
+            convertFile(file, path, read_file)
