@@ -54,7 +54,8 @@ def replaceCommasWithColons(inlines):
 
 def replaceSpreadStyles(styles):
     regex = r'(?:export )*const ([a-zA-Z]+) = \{([^}]*)\};'
-    matches = map(lambda x: re.findall(regex, x, re.MULTILINE | re.DOTALL)[0], styles)
+    matches = map(lambda x: (re.findall(regex, x, re.MULTILINE | re.DOTALL)[:1] or [None])[0], styles)
+    matches = [i for i in matches if i] 
     dic = {x[0]: { "content":x[1], "classes":[x[0]]} for x in matches}
 
     for entry in dic.items():
