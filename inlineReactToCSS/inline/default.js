@@ -9,6 +9,20 @@ const SPEECH_BOX_WIDTH = '2rem';
 const SPEECH_BOX_HEIGHT = '4rem';
 const BORDER_COLOR = 'lime';
 
+const optionsContainerStyle = {
+	margin: 'auto 4rem',
+	display: 'flex',
+	flexDirection: 'column',
+	justifyContent: 'center',
+	alignItems: 'center',
+	border: `1px solid ${BORDER_COLOR}`
+};
+
+const finalOptionContainerStyle = {
+	...optionsContainerStyle,
+	backgroundColor: 'green'
+};
+
 export const dateSelectStyle = {
 	display: 'grid',
 	backgroundColor: DATE_SELECT_COLOR,
@@ -38,20 +52,6 @@ export const getBounceButtonStyle = (pressed, delay) => {
 		boxShadow: '0 2px 1px #ccc, 0 0.3rem #ccc',
 		animation: pressed ? `button-bounce ${delay / 1000}s 1` : 'none'
 	};
-};
-
-const optionsContainerStyle = {
-	margin: 'auto 4rem',
-	display: 'flex',
-	flexDirection: 'column',
-	justifyContent: 'center',
-	alignItems: 'center',
-	border: `1px solid ${BORDER_COLOR}`
-};
-
-const finalOptionContainerStyle = {
-	...optionsContainerStyle,
-	backgroundColor: 'green'
 };
 
 export const optionsPanelItem = {
