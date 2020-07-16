@@ -88,11 +88,7 @@ def inlineStylesToCss(styles, constDic):
     styles = map(lambda x: addCssVarsToInline(x, constDic), styles)
     styles = removeSpeechMarks(styles)
     styles = replaceCommasWithColons(styles)
-
     styles = replaceSpreadStyles(styles)
-    # for style in styles:
-    #     print(style)
-
     styles = removeCamelCase(styles)
     return convertToClassName(styles)
 
