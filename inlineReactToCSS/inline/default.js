@@ -22,6 +22,8 @@ export const dateSelectStyle = {
 	zIndex: DATE_Z_INDEX
 };
 
+export const commonMargin = { margin: '0.5rem', padding: '1rem' };
+
 export const getBounceButtonStyle = (pressed, delay) => {
 	return {
 		position: 'relative',
