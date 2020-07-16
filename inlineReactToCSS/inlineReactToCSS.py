@@ -37,7 +37,7 @@ def formatIfInlineSingleLine(inline):
         regex = r'(?![a-zA-Z0-9, ]+\(),(?![a-zA-Z0-9, ]+\))'
         inline = re.sub(regex, ';', inline)
     return inline
-    
+
 def addCssVarsToInline(inline, constDic):
     keys = list(constDic.keys())
     for i in range(len(keys)):
@@ -51,6 +51,24 @@ def removeSpeechMarks(inlines):
 
 def replaceCommasWithColons(inlines):
     return map(lambda x: re.sub(r',\n', ';\n', x), inlines)
+
+def replaceSpreadStyles(styles):
+    regex = r'(?:export )*const ([a-zA-Z]+) = \{([^}]*)\};'
+    matches = map(lambda x: re.findall(regex, x, re.MULTILINE | re.DOTALL)[0], styles)
+    dic = {x[0]: { "content":x[1], "classes":[x[0]]} for x in matches}
+
+    for entry in dic.items():
+        for style in dic.keys():
+            if (len(re.findall(style, entry[1]['content'])) > 0): 
+                dic[style]['classes'].append(entry[0])
+                entry[1]['content'] = re.sub('...{};\n'.format(style), '', entry[1]['content'])
+
+    formatStyles = [None]*len(dic)
+    for i, value in enumerate(dic.values()):
+        classname = ' '.join(map(lambda x: '.'+x+',', value['classes']))[:-1]
+        formatStyles[i] = classname + ' {'+value['content']+'};\n'
+
+    return formatStyles
 
 
 def removeCamelCase(inlines):
@@ -69,6 +87,11 @@ def inlineStylesToCss(styles, constDic):
     styles = map(lambda x: addCssVarsToInline(x, constDic), styles)
     styles = removeSpeechMarks(styles)
     styles = replaceCommasWithColons(styles)
+
+    styles = replaceSpreadStyles(styles)
+    # for style in styles:
+    #     print(style)
+
     styles = removeCamelCase(styles)
     return convertToClassName(styles)
 
