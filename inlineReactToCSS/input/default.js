@@ -23,9 +23,9 @@ export const dateSelectStyle = {
 };
 
 export const commonMargin = { margin: '0.5rem', padding: '1rem' };
-export const subContainer = { backgroundImage: 'linear-gradient(#fff, #eee)' };
+export const subContainer = { transform: 'translate(5px, 1px)' };
 export const parentContainer = {
-    backgroundImage: 'linear-gradient(#fff, #eee)',
+    transform: 'translate(5px, 1px)',
     margin: '1rem',
 };
 

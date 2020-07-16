@@ -26,9 +26,20 @@ def usedConstInlines(inlines, constants):
     return {key: constants[key] for key in used}
 
 
+def formatIfInlineSingleLine(inline):
+    if(len(re.findall(r'\n', inline, re.MULTILINE))==0):
+        regex = r'(?![a-zA-Z0-9, ]+\(),(?![a-zA-Z0-9, ]+\))'
+        inline = re.sub(regex, ';', inline)
+    return inline
+
+
 def findInlineStylesFromCss(file):
     regex = r'(?:export )*const [a-zA-z0-9]+ = {.+?(?=};)};'
-    return re.findall(regex, file, re.MULTILINE | re.DOTALL)
+    inlines = re.findall(regex, file, re.MULTILINE | re.DOTALL)
+    inlines = map(formatIfInlineSingleLine, inlines)
+    for inline in inlines:
+        print(inline)
+    return inlines
 
 def addCssVarsToInline(inline, constDic):
     keys = list(constDic.keys())

@@ -23,8 +23,8 @@ export const dateSelectStyle = {
 };
 
 export const commonMargin = { margin: '0.5rem', padding: '1rem' };
-export const subContainer = { backgroundImage: 'linear-gradient(#fff, #eee)' };
-export const parentContainer = { backgroundImage: 'linear-gradient(#fff, #eee)', margin: '1rem' };
+export const subContainer = { transform: 'translate(5px, 1px)' };
+export const parentContainer = { transform: 'translate(5px, 1px)', margin: '1rem' };
 
 export const getBounceButtonStyle = (pressed, delay) => {
 	return {
