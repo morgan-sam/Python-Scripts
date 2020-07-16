@@ -82,13 +82,18 @@ def convertToClassName(inlines):
 def constToCssVarFormat(const):
     return re.sub(r'_','-',const.lower())
 
+def formatColorsToLowercase(inline):
+    return re.sub(r'(#(?:[A-Za-z0-9]{6})|#(?:[A-Za-z0-9]{3}))', lambda x: x.group(0).lower(), inline)
+
 
 def inlineStylesToCss(styles, constDic):
+    styles = map(formatColorsToLowercase, styles)
     styles = map(formatIfInlineSingleLine, styles)
     styles = map(lambda x: addCssVarsToInline(x, constDic), styles)
     styles = removeSpeechMarks(styles)
     styles = replaceCommasWithColons(styles)
     styles = replaceSpreadStyles(styles)
+    print(styles)
     styles = removeCamelCase(styles)
     return convertToClassName(styles)
 

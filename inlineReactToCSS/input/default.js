@@ -20,7 +20,7 @@ const optionsContainerStyle = {
 
 const finalOptionContainerStyle = {
     ...optionsContainerStyle,
-    backgroundColor: 'green',
+    backgroundColor: '#ee66CC',
 };
 
 export const dateSelectStyle = {
