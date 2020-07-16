@@ -108,8 +108,7 @@ for currentpath, folders, files in os.walk(dir):
     for file in files:
         if file.endswith(".js"):
             path = (os.path.join(currentpath, file))
-            open_file = open(path, 'r')
-            read_file = open_file.read()
+            read_file = open(path, 'r').read()
             constants = fileConstDic(read_file)
             inlines = findInlineStylesFromCss(read_file)
             constInlines = usedConstInlines(inlines, constants)
