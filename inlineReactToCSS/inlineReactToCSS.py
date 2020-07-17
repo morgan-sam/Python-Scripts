@@ -45,12 +45,12 @@ def addCssVarsToInline(inline, constDic):
         inline = re.sub(regex, 'var(--{})'.format(constToCssVarFormat(keys[i])), inline)
     return inline
 
-def removeSpeechMarks(inlines):
-    return map(lambda x: re.sub(r'[\'\`]', '', x), inlines)
+def removeSpeechMarks(inline):
+    return re.sub(r'[\'\`]', '', inline)
 
 
-def replaceCommasWithColons(inlines):
-    return map(lambda x: re.sub(r',\n', ';\n', x), inlines)
+def replaceCommasWithColons(inline):
+    return re.sub(r',\n', ';\n', inline)
 
 def replaceSpreadStyles(styles):
     regex = r'(?:export )*const ([a-zA-Z]+) = \{([^}]*)\};'
@@ -72,12 +72,12 @@ def replaceSpreadStyles(styles):
     return formatStyles
 
 
-def removeCamelCase(inlines):
-    return map(lambda x: re.sub(r'([A-Z])', lambda x: '-'+x.group(0).lower(), x), inlines)
+def removeCamelCase(inline):
+    return re.sub(r'([A-Z])', lambda x: '-'+x.group(0).lower(), inline)
 
 
-def convertToClassName(inlines):
-    return map(lambda x: re.sub(r'(?:export )*const ([a-zA-z0-9\-]+) = ', '.\\1 ', x), inlines)
+def convertToClassName(inline):
+    return re.sub(r'(?:export )*const ([a-zA-z0-9\-]+) = ', '.\\1 ', inline)
 
 def constToCssVarFormat(const):
     return re.sub(r'_','-',const.lower())
@@ -90,12 +90,11 @@ def inlineStylesToCss(styles, constDic):
     styles = map(formatColorsToLowercase, styles)
     styles = map(formatIfInlineSingleLine, styles)
     styles = map(lambda x: addCssVarsToInline(x, constDic), styles)
-    styles = removeSpeechMarks(styles)
-    styles = replaceCommasWithColons(styles)
+    styles = map(removeSpeechMarks, styles)
+    styles = map(replaceCommasWithColons, styles)
     styles = replaceSpreadStyles(styles)
-    print(styles)
-    styles = removeCamelCase(styles)
-    return convertToClassName(styles)
+    styles = map(removeCamelCase, styles)
+    return map(convertToClassName, styles)
 
 def convertConstDicToCssVars(constDic):
     return map(lambda x: '--{}: {};'.format(constToCssVarFormat(x[0]),x[1]), constDic.items())
