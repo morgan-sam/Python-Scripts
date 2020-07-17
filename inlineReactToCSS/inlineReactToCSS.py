@@ -58,15 +58,17 @@ def makeClassContentDic(styles):
     matches = [i for i in matches if i] 
     return {x[0]: { "content":x[1], "classes":[x[0]]} for x in matches}
 
-
-def replaceSpreadStyles(styles):
-    dic = makeClassContentDic(styles)
-
+def detectClassesInContent(dic):
     for entry in dic.items():
         for style in dic.keys():
             if (len(re.findall(style, entry[1]['content'])) > 0): 
                 dic[style]['classes'].append(entry[0])
                 entry[1]['content'] = re.sub('...{};\n'.format(style), '', entry[1]['content'])
+    return dic
+
+def replaceSpreadStyles(styles):
+    dic = makeClassContentDic(styles)
+    dic = detectClassesInContent(dic)
 
     formatStyles = [None]*len(dic)
     for i, value in enumerate(dic.values()):
