@@ -4,6 +4,15 @@
  
  Typically the scripts are for performing file operations, etc.
  
+ <h3>Scripts</h3> 
+ <p>
+   <ol>
+     <li><a href='https://github.com/morgan-sam/Python-Scripts/#functionsToES6'>functionsToES6</a></li>
+     <li><a href='https://github.com/morgan-sam/Python-Scripts/#inlineReactToCSS'>inlineReactToCSS</a></li>
+   </ol>
+ </p>
+ 
+ 
  <h3>functionsToES6</h3>
  
  A small script for converting files that use ES5 javascript to ES6, for example:
