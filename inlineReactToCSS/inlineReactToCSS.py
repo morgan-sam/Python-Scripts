@@ -66,17 +66,17 @@ def detectClassesInContent(dic):
                 entry[1]['content'] = re.sub('...{};\n'.format(style), '', entry[1]['content'])
     return dic
 
-def replaceSpreadStyles(styles):
-    dic = makeClassContentDic(styles)
-    dic = detectClassesInContent(dic)
-
+def createFormattedStylesFromClasses(dic):
     formatStyles = [None]*len(dic)
     for i, value in enumerate(dic.values()):
         classname = ' '.join(map(lambda x: '.'+x+',', value['classes']))[:-1]
         formatStyles[i] = classname + ' {'+value['content']+'};\n'
-
     return formatStyles
 
+def replaceSpreadStyles(styles):
+    dic = makeClassContentDic(styles)
+    dic = detectClassesInContent(dic)
+    return createFormattedStylesFromClasses(dic)
 
 def removeCamelCase(inline):
     return re.sub(r'([A-Z])', lambda x: '-'+x.group(0).lower(), inline)
