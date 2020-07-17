@@ -52,11 +52,15 @@ def removeSpeechMarks(inline):
 def replaceCommasWithColons(inline):
     return re.sub(r',\n', ';\n', inline)
 
-def replaceSpreadStyles(styles):
+def makeClassContentDic(styles):
     regex = r'(?:export )*const ([a-zA-Z]+) = \{([^}]*)\};'
     matches = map(lambda x: (re.findall(regex, x, re.MULTILINE | re.DOTALL)[:1] or [None])[0], styles)
     matches = [i for i in matches if i] 
-    dic = {x[0]: { "content":x[1], "classes":[x[0]]} for x in matches}
+    return {x[0]: { "content":x[1], "classes":[x[0]]} for x in matches}
+
+
+def replaceSpreadStyles(styles):
+    dic = makeClassContentDic(styles)
 
     for entry in dic.items():
         for style in dic.keys():
