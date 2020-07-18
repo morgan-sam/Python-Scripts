@@ -114,7 +114,6 @@ def inlineStylesToCss(styles, constDic):
     styles = map(formatIfInlineSingleLine, styles)
     styles = map(lambda x: addCssVarsToInline(x, constDic), styles)
     styles = map(removeSpeechMarks, styles)
-
     styles = map(replaceCommasWithColons, styles)
     styles = replaceSpreadStyles(styles)
     styles = map(removeCamelCase, styles)
