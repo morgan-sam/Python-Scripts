@@ -72,7 +72,6 @@ def detectClassesInContent(dic):
                 dic[style]['classes'].append(entry[0])
                 entry[1]['content'] = re.sub(
                     '...{};\n*'.format(style), '', entry[1]['content'])
-    print(dic)
     return dic
 
 
@@ -91,7 +90,7 @@ def replaceSpreadStyles(styles):
 
 
 def removeCamelCase(inline):
-    return re.sub(r'([A-Z])', lambda x: '-'+x.group(0).lower(), inline)
+    return re.sub(r'(?<!translate)([A-Z])', lambda x: '-'+x.group(0).lower(), inline)
 
 
 def convertToClassName(inline):
