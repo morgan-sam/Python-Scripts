@@ -11,7 +11,7 @@ def getDirectory():
 
 
 def fileConstDic(file):
-    regex = r'(?:export )*const ([A-Z_]+) = ([a-zA-Z0-9_\-\'\"\`]+);'
+    regex = r'(?:export )*const ([a-zA-Z_]+) = ([a-zA-Z0-9_\-\'\"\`\#]+);'
     constants = re.findall(regex, file, re.MULTILINE | re.DOTALL)
     return {constants[i][0]: constants[i][1] for i in range(0, len(constants))}
 
