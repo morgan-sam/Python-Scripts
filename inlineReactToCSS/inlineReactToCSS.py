@@ -43,9 +43,8 @@ def formatIfInlineSingleLine(inline):
 def addCssVarsToInline(inline, constDic):
     keys = list(constDic.keys())
     for i in range(len(keys)):
-        regex = re.compile('(?:\\$\\{)*'+keys[i]+'(?:\\})*')
         inline = re.sub(
-            regex, 'var(--{})'.format(constToCssVarFormat(keys[i])), inline)
+            keys[i], 'var(--{})'.format(constToCssVarFormat(keys[i])), inline)
     return inline
 
 
@@ -105,11 +104,18 @@ def formatColorsToLowercase(inline):
     return re.sub(r'(#(?:[A-Za-z0-9]{6})|#(?:[A-Za-z0-9]{3}))', lambda x: x.group(0).lower(), inline)
 
 
+def templatesToCalc(style):
+    return re.sub(r'(?:\$\{)([^\{\}]+)(?:\})', r"calc(\1)", style)
+
+
 def inlineStylesToCss(styles, constDic):
+    styles = map(templatesToCalc, styles)
     styles = map(formatColorsToLowercase, styles)
     styles = map(formatIfInlineSingleLine, styles)
     styles = map(lambda x: addCssVarsToInline(x, constDic), styles)
+    print(styles)
     styles = map(removeSpeechMarks, styles)
+
     styles = map(replaceCommasWithColons, styles)
     styles = replaceSpreadStyles(styles)
     styles = map(removeCamelCase, styles)
