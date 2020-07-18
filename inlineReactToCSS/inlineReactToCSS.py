@@ -113,7 +113,6 @@ def inlineStylesToCss(styles, constDic):
     styles = map(formatColorsToLowercase, styles)
     styles = map(formatIfInlineSingleLine, styles)
     styles = map(lambda x: addCssVarsToInline(x, constDic), styles)
-    print(styles)
     styles = map(removeSpeechMarks, styles)
 
     styles = map(replaceCommasWithColons, styles)
