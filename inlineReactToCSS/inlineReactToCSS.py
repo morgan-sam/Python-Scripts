@@ -71,7 +71,8 @@ def detectClassesInContent(dic):
             if (len(re.findall(style, entry[1]['content'])) > 0):
                 dic[style]['classes'].append(entry[0])
                 entry[1]['content'] = re.sub(
-                    '...{};\n'.format(style), '', entry[1]['content'])
+                    '...{};\n*'.format(style), '', entry[1]['content'])
+    print(dic)
     return dic
 
 
