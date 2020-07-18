@@ -13,11 +13,13 @@ def getDirectory():
 def fileConstDic(file):
     regex = r'(?:export )*const ([A-Z_]+) = ([a-zA-Z0-9_\-\'\"\`]+);'
     constants = re.findall(regex, file, re.MULTILINE | re.DOTALL)
-    return {constants[i][0]: constants[i][1] for i in range(0, len(constants))} 
+    return {constants[i][0]: constants[i][1] for i in range(0, len(constants))}
+
 
 def getNonExportConstants(file):
     regex = r'^(?!export )const ([A-Z_]+) = [a-zA-Z0-9_\-\'\"\`]+;$'
     return re.findall(regex, file, re.MULTILINE | re.DOTALL)
+
 
 def usedConstInlines(inlines, constants):
     varNames = list(constants.keys())
@@ -26,24 +28,26 @@ def usedConstInlines(inlines, constants):
     return {key: constants[key] for key in used}
 
 
-
 def findInlineStylesFromCss(file):
     regex = r'(?:export )*const [a-zA-z0-9]+ = {.+?(?=};)};'
     return re.findall(regex, file, re.MULTILINE | re.DOTALL)
 
 
 def formatIfInlineSingleLine(inline):
-    if(len(re.findall(r'\n', inline, re.MULTILINE))==0):
+    if(len(re.findall(r'\n', inline, re.MULTILINE)) == 0):
         regex = r'(?![a-zA-Z0-9, ]+\(),(?![a-zA-Z0-9, ]+\))'
         inline = re.sub(regex, ';', inline)
     return inline
+
 
 def addCssVarsToInline(inline, constDic):
     keys = list(constDic.keys())
     for i in range(len(keys)):
         regex = re.compile('(?:\\$\\{)*'+keys[i]+'(?:\\})*')
-        inline = re.sub(regex, 'var(--{})'.format(constToCssVarFormat(keys[i])), inline)
+        inline = re.sub(
+            regex, 'var(--{})'.format(constToCssVarFormat(keys[i])), inline)
     return inline
+
 
 def removeSpeechMarks(inline):
     return re.sub(r'[\'\`]', '', inline)
@@ -52,19 +56,24 @@ def removeSpeechMarks(inline):
 def replaceCommasWithColons(inline):
     return re.sub(r',\n', ';\n', inline)
 
+
 def makeClassContentDic(styles):
-    regex = r'(?:export )*const ([a-zA-Z]+) = \{([^}]*)\};'
-    matches = map(lambda x: (re.findall(regex, x, re.MULTILINE | re.DOTALL)[:1] or [None])[0], styles)
-    matches = [i for i in matches if i] 
-    return {x[0]: { "content":x[1], "classes":[x[0]]} for x in matches}
+    regex = r'(?:export )*const ([a-zA-Z]+) = \{((?:.|\n)*)(?:};)'
+    matches = map(lambda x: (re.findall(regex, x, re.MULTILINE |
+                                        re.DOTALL)[:1] or [None])[0], styles)
+    matches = [i for i in matches if i]
+    return {x[0]: {"content": x[1], "classes": [x[0]]} for x in matches}
+
 
 def detectClassesInContent(dic):
     for entry in dic.items():
         for style in dic.keys():
-            if (len(re.findall(style, entry[1]['content'])) > 0): 
+            if (len(re.findall(style, entry[1]['content'])) > 0):
                 dic[style]['classes'].append(entry[0])
-                entry[1]['content'] = re.sub('...{};\n'.format(style), '', entry[1]['content'])
+                entry[1]['content'] = re.sub(
+                    '...{};\n'.format(style), '', entry[1]['content'])
     return dic
+
 
 def createFormattedStylesFromClasses(dic):
     formatStyles = [None]*len(dic)
@@ -73,10 +82,12 @@ def createFormattedStylesFromClasses(dic):
         formatStyles[i] = classname + ' {'+value['content']+'};\n'
     return formatStyles
 
+
 def replaceSpreadStyles(styles):
     dic = makeClassContentDic(styles)
     dic = detectClassesInContent(dic)
     return createFormattedStylesFromClasses(dic)
+
 
 def removeCamelCase(inline):
     return re.sub(r'([A-Z])', lambda x: '-'+x.group(0).lower(), inline)
@@ -85,8 +96,10 @@ def removeCamelCase(inline):
 def convertToClassName(inline):
     return re.sub(r'(?:export )*const ([a-zA-z0-9\-]+) = ', '.\\1 ', inline)
 
+
 def constToCssVarFormat(const):
-    return re.sub(r'_','-',const.lower())
+    return re.sub(r'_', '-', const.lower())
+
 
 def formatColorsToLowercase(inline):
     return re.sub(r'(#(?:[A-Za-z0-9]{6})|#(?:[A-Za-z0-9]{3}))', lambda x: x.group(0).lower(), inline)
@@ -102,8 +115,9 @@ def inlineStylesToCss(styles, constDic):
     styles = map(removeCamelCase, styles)
     return map(convertToClassName, styles)
 
+
 def convertConstDicToCssVars(constDic):
-    return map(lambda x: '--{}: {};'.format(constToCssVarFormat(x[0]),x[1]), constDic.items())
+    return map(lambda x: '--{}: {};'.format(constToCssVarFormat(x[0]), x[1]), constDic.items())
 
 
 def convertInlinesToCssFile(file, inlines, constDic):
@@ -120,11 +134,13 @@ def convertInlinesToCssFile(file, inlines, constDic):
             for style in styles:
                 f.write("%s\n\n" % style)
 
+
 def removeUnusedConsts(read_file):
     keys = getNonExportConstants(read_file)
     for i in range(len(keys)):
         if (len(re.findall(keys[i], read_file)) < 2):
-            read_file = re.sub(r'const {} = ([a-zA-Z0-9_\-\'\"\`]+);'.format(keys[i]), '', read_file)
+            read_file = re.sub(
+                r'const {} = ([a-zA-Z0-9_\-\'\"\`]+);'.format(keys[i]), '', read_file)
     return read_file
 
 
@@ -138,6 +154,7 @@ def writeToJsFile(read_file, inlines, path):
     else:
         os.remove(path)
 
+
 def openFile(currentpath, file):
     path = (os.path.join(currentpath, file))
     read_file = open(path, 'r').read()
@@ -148,7 +165,7 @@ def convertFile(file, path, read_file):
     constants = fileConstDic(read_file)
     inlines = findInlineStylesFromCss(read_file)
     constInlines = usedConstInlines(inlines, constants)
-    writeToJsFile(read_file, inlines, path);
+    writeToJsFile(read_file, inlines, path)
     convertInlinesToCssFile(file, inlines, constInlines)
 
 
