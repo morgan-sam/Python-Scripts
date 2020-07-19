@@ -124,19 +124,23 @@ def convertConstDicToCssVars(constDic):
     return map(lambda x: '--{}: {};'.format(constToCssVarFormat(x[0]), x[1]), constDic.items())
 
 
+def writeToCssFile(newFileName, cssVars, styles):
+    with open(os.path.join(currentpath, newFileName), 'a+') as f:
+        if (len(cssVars)):
+            f.write(":root {\n")
+            for var in cssVars:
+                f.write("    %s\n" % var)
+            f.write("}\n\n")
+        for style in styles:
+            f.write("%s\n\n" % style)
+
+
 def convertInlinesToCssFile(file, inlines, constDic):
     if (len(inlines)):
         newFileName = re.sub(r'.js', '.css', file)
         styles = inlineStylesToCss(inlines, constDic)
         cssVars = convertConstDicToCssVars(constDic)
-        with open(os.path.join(currentpath, newFileName), 'a+') as f:
-            if (len(cssVars)):
-                f.write(":root {\n")
-                for var in cssVars:
-                    f.write("    %s\n" % var)
-                f.write("}\n\n")
-            for style in styles:
-                f.write("%s\n\n" % style)
+        writeToCssFile(newFileName, cssVars, styles)
 
 
 def removeUnusedConsts(read_file):
