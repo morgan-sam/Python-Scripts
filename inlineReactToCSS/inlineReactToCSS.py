@@ -33,6 +33,14 @@ def findInlineStylesFromCss(file):
     return re.findall(regex, file, re.MULTILINE | re.DOTALL)
 
 
+def addInlineToConvertedList(inline):
+    regex = r'(?:export )*const ([a-zA-Z]+) = {'
+    title = re.findall(regex, inline, re.MULTILINE | re.DOTALL)[0]
+    if (len(title)):
+        write_file = open('./inline_conversion', 'a+')
+        write_file.write(title+'\n')
+
+
 def formatIfInlineSingleLine(inline):
     if(len(re.findall(r'\n', inline, re.MULTILINE)) == 0):
         regex = r'(?![a-zA-Z0-9, ]+\(),(?![a-zA-Z0-9, ]+\))'
@@ -172,15 +180,21 @@ def openFile(currentpath, file):
 def convertFile(file, path, read_file):
     constants = fileConstDic(read_file)
     inlines = findInlineStylesFromCss(read_file)
+    map(addInlineToConvertedList, inlines)
     constInlines = usedConstInlines(inlines, constants)
     writeToJsFile(read_file, inlines, path)
     convertInlinesToCssFile(file, inlines, constInlines)
 
 
+newStyleArray = []
 dir = getDirectory()
-os.system('prettier --write {}/*.js'.format(dir))
-for currentpath, folders, files in os.walk(dir):
-    for file in files:
-        if file.endswith(".js"):
-            path, read_file = openFile(currentpath, file)
-            convertFile(file, path, read_file)
+
+if (os.path.exists('./inline_conversion')):
+    print('ERROR: Conversion has already taken place')
+else:
+    os.system('prettier --write {}/*.js'.format(dir))
+    for currentpath, folders, files in os.walk(dir):
+        for file in files:
+            if file.endswith(".js"):
+                path, read_file = openFile(currentpath, file)
+                convertFile(file, path, read_file)
