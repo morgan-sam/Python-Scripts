@@ -29,7 +29,7 @@ def usedConstInlines(inlines, constants):
 
 
 def findInlineStylesFromCss(file):
-    regex = r'(?:export )*const [a-zA-z0-9]+ = {.+?(?=};)};'
+    regex = r'(?:export )*const [a-zA-z0-9]+ = {(?:(?![^\'\`\"][a-zA-Z0-9]+?\(.*\)[^\'\`\"]).)*?};'
     return re.findall(regex, file, re.MULTILINE | re.DOTALL)
 
 
