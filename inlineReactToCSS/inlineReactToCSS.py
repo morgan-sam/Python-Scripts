@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+from itertools import chain
 
 
 def getDirectory():
@@ -204,3 +205,7 @@ for currentpath, folders, files in os.walk(dir):
             importList[file[:-3]] = []
             convertFile(file, path, read_file)
             createImportFile(importList)
+
+
+styleNames = sorted(list(chain.from_iterable(importList.values())))
+print(styleNames)
