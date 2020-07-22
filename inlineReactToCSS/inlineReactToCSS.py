@@ -37,7 +37,7 @@ def addInlineToConvertedList(inline):
     regex = r'(?:export )*const ([a-zA-Z]+) = {'
     title = re.findall(regex, inline, re.MULTILINE | re.DOTALL)[0]
     if (len(title)):
-        newStyleArray.append(title)
+        importList[file[:-3]].append(title)
 
 
 def formatIfInlineSingleLine(inline):
@@ -148,7 +148,6 @@ def convertInlinesToCssFile(file, inlines, constDic):
         styles = inlineStylesToCss(inlines, constDic)
         cssVars = convertConstDicToCssVars(constDic)
         writeToCssFile(newFileName, cssVars, styles)
-        newCssFiles.append(newFileName)
 
 
 def removeUnusedConsts(read_file):
@@ -186,8 +185,8 @@ def convertFile(file, path, read_file):
     convertInlinesToCssFile(file, inlines, constInlines)
 
 
-newStyleArray = []
-newCssFiles = []
+importList = {}
+
 dir = getDirectory()
 
 os.system('prettier --write {}/*.js'.format(dir))
@@ -195,7 +194,7 @@ for currentpath, folders, files in os.walk(dir):
     for file in files:
         if file.endswith(".js"):
             path, read_file = openFile(currentpath, file)
+            importList[file[:-3]] = []
             convertFile(file, path, read_file)
 
-print(newStyleArray)
-print(newCssFiles)
+print(importList)
