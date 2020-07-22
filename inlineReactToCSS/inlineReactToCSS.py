@@ -185,6 +185,13 @@ def convertFile(file, path, read_file):
     convertInlinesToCssFile(file, inlines, constInlines)
 
 
+def createImportFile(importList):
+    importListFile = open(dir + '/import_list', 'w')
+    for key, value in importList.items():
+        if (len(value)):
+            importListFile.write("import './" + key + ".css';\n")
+
+
 importList = {}
 
 dir = getDirectory()
@@ -196,5 +203,4 @@ for currentpath, folders, files in os.walk(dir):
             path, read_file = openFile(currentpath, file)
             importList[file[:-3]] = []
             convertFile(file, path, read_file)
-
-print(importList)
+            createImportFile(importList)
