@@ -194,9 +194,7 @@ def createImportFile(importList):
 
 
 importList = {}
-
 dir = getDirectory()
-
 os.system('prettier --write {}/*.js'.format(dir))
 for currentpath, folders, files in os.walk(dir):
     for file in files:
